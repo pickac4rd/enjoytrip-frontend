@@ -2,7 +2,7 @@
   <b-navbar id="header" class="header fixed-top" data-scrollto-offset="0">
     <div class="container d-flex align-items-center justify-content-between">
       <a href="/" class="logo d-flex align-items-center scrollto me-auto me-lg-0">
-        <h1>Enjoy<span>Trip</span></h1>
+        <h1>어떤<span> 데?</span></h1>
       </a>
 
       <nav id="navbar" class="navbar">
@@ -12,9 +12,6 @@
           </li>
           <li>
             <router-link to="/spot">관광지 검색</router-link>
-          </li>
-          <li>
-            <router-link to="/plan">여행계획 짜기</router-link>
           </li>
           <li>
             <router-link to="/board">게시판</router-link>
@@ -60,4 +57,5 @@ export default {
 a:hover {
   cursor: pointer;
 }
+
 </style>
