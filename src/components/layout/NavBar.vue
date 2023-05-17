@@ -29,7 +29,10 @@
       <router-link to="/user/login" class="btn-getstarted scrollto" v-if="!userInfo"
         >로그인</router-link
       >
+      
     </div>
+                <b-button v-b-toggle.sidebar-right>날씨</b-button>
+
   </b-navbar>
 </template>
 
