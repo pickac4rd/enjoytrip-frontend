@@ -3,9 +3,9 @@
     <div class="search-container">
       <select v-model="sido_code">
         <option value="">시/도</option>
-        <option value="option1">Option 1</option>
-        <option value="option2">Option 2</option>
-        <option value="option3">Option 3</option>
+        <option v-for="sido in sido_list" :key="sido.sido_code">
+          {{ sido.sido_name }}
+        </option>
         <option value="">선택하지 않음</option>
       </select>
       <select v-model="gugun_code">
@@ -29,14 +29,24 @@
 </template>
 
 <script>
+import { mapMutations, mapState, mapActions } from "vuex";
+import Constant from "../../store/constant/Constant";
 export default {
-  data() {
-    return {
-      sido_code: "",
-      gugun_code: "",
-      content_type_id: "",
-      title: "",
-    };
+  created() {
+    this.$store.dispatch("attractionStore/" + Constant.GET_SIDOS);
+  },
+  computed: {
+    ...mapState("attractionStore", [
+      "sido_list",
+      "sido_code",
+      "gugun_code",
+      "content_type_id",
+      "title",
+    ]),
+  },
+  methods: {
+    ...mapActions("attractionStore", [Constant.GET_SIDOS]),
+    ...mapMutations("attractionStore", [Constant.GET_SIDOS]),
   },
 };
 </script>
