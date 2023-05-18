@@ -1,19 +1,23 @@
 <template>
   <div id="app">
-    <div id="header">
-      <nav-bar></nav-bar>
-      <side-bar style="float: right"></side-bar>
-    </div>
+    <nav-bar></nav-bar>
+    <side-bar></side-bar>
     <router-view />
+    <the-footer></the-footer>
   </div>
 </template>
 
 <script>
 import NavBar from "@/components/layout/NavBar";
+import TheFooter from "@/components/layout/TheFooter";
+import SideBar from "@/components/layout/SideBar";
+
 export default {
   name: "App",
   components: {
     NavBar,
+    SideBar,
+    TheFooter,
   },
 };
 </script>
