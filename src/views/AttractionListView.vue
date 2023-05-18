@@ -1,20 +1,15 @@
 <template>
   <div id="app">
-    <div id="header">
-      <nav-bar></nav-bar>
-      <side-bar style="float: right"></side-bar>
-    </div>
-    <router-view />
+    <attraction-search-form></attraction-search-form>
+    <attraction-list></attraction-list>
   </div>
 </template>
 
 <script>
-import NavBar from "@/components/layout/NavBar";
+import AttractionList from "../components/attraction/AttractionList.vue";
+import AttractionSearchForm from "../components/attraction/AttractionSearch.vue";
 export default {
-  name: "App",
-  components: {
-    NavBar,
-  },
+  components: { AttractionList, AttractionSearchForm },
 };
 </script>
 

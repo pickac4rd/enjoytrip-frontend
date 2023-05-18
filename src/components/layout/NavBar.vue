@@ -1,7 +1,10 @@
 <template>
   <b-navbar id="header" class="header fixed-top" data-scrollto-offset="0">
     <div class="container d-flex align-items-center justify-content-between">
-      <a href="/" class="logo d-flex align-items-center scrollto me-auto me-lg-0">
+      <a
+        href="/"
+        class="logo d-flex align-items-center scrollto me-auto me-lg-0"
+      >
         <h1>어떤<span> 데?</span></h1>
       </a>
 
@@ -23,10 +26,17 @@
         <b-icon icon="list" class="mobile-nav-toggle d-none"></b-icon>
       </nav>
 
-      <a class="btn-getstarted scrollto" @click="logout" id="btn-logout" v-if="userInfo"
+      <a
+        class="btn-getstarted scrollto"
+        @click="logout"
+        id="btn-logout"
+        v-if="userInfo"
         >로그아웃</a
       >
-      <router-link to="/user/login" class="btn-getstarted scrollto" v-if="!userInfo"
+      <router-link
+        to="/user/login"
+        class="btn-getstarted scrollto"
+        v-if="!userInfo"
         >로그인</router-link
       >
     </div>
@@ -57,5 +67,4 @@ export default {
 a:hover {
   cursor: pointer;
 }
-
 </style>
