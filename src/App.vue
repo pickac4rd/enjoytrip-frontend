@@ -4,7 +4,9 @@
     <side-bar></side-bar>
     <router-view key="$route.path" />
     <the-footer></the-footer>
+    
   </div>
+  
 </template>
 
 <script>
