@@ -1,20 +1,20 @@
 <template>
   <div>
-    <div class="d-flex justify-content-center">
-      <b-pagination
-        v-model="currentPage"
-        :total-rows="60"
-        @page-click="pageClick"
-      ></b-pagination>
-    </div>
-    <b-card-group columns>
+    <b-pagination
+    v-model="currentPage"
+    :total-rows="120"
+    :per-page="6"
+    align="center"
+    @page-click="pageClick"></b-pagination>
+    
+    <b-card-group columns id="b-card-group">
       <b-card
         v-for="paginatedCard in attraction_list"
         :key="paginatedCard.content_id"
         :img-src="paginatedCard.first_image"
         img-top
       >
-        test
+        {{paginatedCard.title}}
       </b-card>
     </b-card-group>
     <!-- <b-card-group deck style="margin: 100px 100px">
@@ -117,23 +117,24 @@
 </template>
 
 <script>
+
 import { mapMutations, mapState, mapActions } from "vuex";
 import Constant from "../../store/constant/Constant";
 export default {
   created() {
     this.$store.dispatch(
-      "attractionStore/" + Constant.GET_PARTIAL_ATTRACTIONS,
-      1
+      "attractionStore/" + Constant.GET_PARTIAL_ATTRACTIONS, this.$route.query.page
     );
   },
   data() {
     return {
-      currentPage: 1,
-      perPage: 6,
+      currentPage:1,
+      perPage:6,
     };
   },
   computed: {
     ...mapState("attractionStore", ["attraction_list"]),
+    
   },
   watch: {},
   methods: {
@@ -145,15 +146,11 @@ export default {
       Constant.GET_ATTRACTIONS,
       Constant.GET_PARTIAL_ATTRACTIONS,
     ]),
-    pageClick(button, page) {
-      alert(page);
-      this.currentPage = page;
-      this.$store.dispatch(
-        "attractionStore/" + Constant.GET_PARTIAL_ATTRACTIONS,
-        page
-      );
-      this.redi;
-    },
+    pageClick: function(button, page){
+      this.$router.push({path:"/list", query:{page}})
+      this.$router.go(0);
+    }
+      
   },
 };
 </script>

@@ -11,8 +11,10 @@ const attractionStore = {
     content_type_id: "",
     title: "",
     attraction_list: [],
+    partial_list: []
   },
-  getters: {},
+  getters: {
+  },
   actions: {
     [Constant.GET_SIDOS]: (attractionStore) => {
       http.get("/attractions/sido").then((response) => {
@@ -32,7 +34,7 @@ const attractionStore = {
 
     [Constant.GET_PARTIAL_ATTRACTIONS]: (attractionStore, offset) => {
       http
-        .get("/attractions/partial?" + `offset=${offset * 6}&limit=6`)
+        .get("/attractions/partial?" + `offset=${(offset-1) * 6}&limit=6`)
         .then((response) => {
           attractionStore.commit(Constant.GET_PARTIAL_ATTRACTIONS, {
             attraction_list: response.data,
