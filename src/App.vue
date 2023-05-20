@@ -2,7 +2,7 @@
   <div id="app">
     <nav-bar></nav-bar>
     <side-bar></side-bar>
-    <router-view key="$route.path" />
+    <router-view/>
     <the-footer></the-footer>
     
   </div>
@@ -13,6 +13,7 @@
 import NavBar from "@/components/layout/NavBar";
 import TheFooter from "@/components/layout/TheFooter";
 import SideBar from "@/components/layout/SideBar";
+
 
 export default {
   name: "App",
