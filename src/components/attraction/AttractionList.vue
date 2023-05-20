@@ -123,8 +123,9 @@ import Constant from "../../store/constant/Constant";
 export default {
   created() {
     this.$store.dispatch(
-      "attractionStore/" + Constant.GET_PARTIAL_ATTRACTIONS, this.$route.query.page
+      "attractionStore/" + Constant.GET_PARTIAL_ATTRACTIONS, this.$route.query.offset
     );
+    this.currentPage = this.$route.query.offset
   },
   data() {
     return {
@@ -147,7 +148,7 @@ export default {
       Constant.GET_PARTIAL_ATTRACTIONS,
     ]),
     pageClick: function(button, page){
-      this.$router.push({path:"/list", query:{page}})
+      this.$router.push({path:"/list", query:{offset:page}})
       this.$router.go(0);
     }
       
