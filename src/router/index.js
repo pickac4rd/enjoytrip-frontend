@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import AttractionListView from "../views/AttractionListView.vue";
+import AttractionDetailView from "../views/AttractionDetailView.vue"
 
 Vue.use(VueRouter);
 
@@ -16,6 +17,11 @@ const routes = [
     name: "list",
     component: AttractionListView,
   },
+  {
+    path: "/detail",
+    name: "detail",
+    component: AttractionDetailView,
+  }
 ];
 
 const router = new VueRouter({

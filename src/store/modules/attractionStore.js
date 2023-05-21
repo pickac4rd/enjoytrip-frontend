@@ -11,7 +11,9 @@ const attractionStore = {
     content_type_id: "",
     title: "",
     attraction_list: [],
-    partial_list: []
+    partial_list: [],
+    attraction_list_length: 0,
+    attraction: null,
   },
   getters: {
   },
@@ -24,8 +26,13 @@ const attractionStore = {
       });
     },
 
+    [Constant.GET_GUGUNS]: (attractionStore, sido_code)=>{
+      http.get("/attractions/sido/" + sido_code)
+
+    },
+
     [Constant.GET_ATTRACTIONS]: (attractionStore) => {
-      http.get("/attractions/partial?offset=0&limit=60").then((response) => {
+      http.get("/attractions").then((response) => {
         attractionStore.commit(Constant.GET_ATTRACTIONS, {
           attraction_list: response.data,
         });
@@ -34,12 +41,23 @@ const attractionStore = {
 
     [Constant.GET_PARTIAL_ATTRACTIONS]: (attractionStore, offset) => {
       http
-        .get("/attractions/partial?" + `offset=${(offset-1) * 6}&limit=6`)
+        .get("/attractions/partial?" + `offset=${offset * 6}&limit=6`)
         .then((response) => {
           attractionStore.commit(Constant.GET_PARTIAL_ATTRACTIONS, {
             attraction_list: response.data,
           });
         });
+    },
+
+    [Constant.GET_ATTRACTION]: (attractionStore, content_id)=>{
+      http
+        .get(`/attractions/${content_id}`)
+        .then((response) => {
+          attractionStore.commit(Constant.GET_ATTRACTION, {
+            attraction: response.data,
+          });
+        });
+      
     },
   },
   mutations: {
@@ -55,6 +73,10 @@ const attractionStore = {
     [Constant.GET_PARTIAL_ATTRACTIONS]: (state, payload) => {
       state.attraction_list = payload.attraction_list;
     },
+
+    [Constant.GET_ATTRACTION]: (state, payload) => {
+      state.attraction = payload.attraction;
+    }
   },
 };
 
