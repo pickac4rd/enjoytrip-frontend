@@ -1,6 +1,5 @@
 <template>
   <div>
-    
     <b-pagination
     v-model="currentPage"
     :total-rows="120"
@@ -24,11 +23,12 @@
 <script>
 import { mapMutations, mapState, mapActions } from "vuex";
 import Constant from "../../store/constant/Constant";
+//import http from "@/api/http"
 
 export default {
-  created() {
-    this.currentPage = this.$route.query.offset;
-    this.loadPartialAttractions(this.$route.query.offset);
+  mounted() {
+    this.currentPage = this.$route.params.page;
+    this.$store.dispatch("attractionStore/" + Constant.GET_PARTIAL_ATTRACTIONS, 1);
   },
   data() {
     return {
@@ -39,6 +39,11 @@ export default {
   },
   computed: {
     ...mapState("attractionStore", ["attraction_list", "attraction"]),
+  },
+  watch:{
+    attraction_list: function(value){
+      console.log(value)
+    }
   },
   methods: {
     ...mapActions("attractionStore", [
@@ -56,11 +61,13 @@ export default {
       );
       this.isDataLoaded = true;
     },
-    pageClick(button, page) {
-      this.$router.push({ path: "/list", query: { offset: page } });
+    async pageClick(button, page) {
+      this.$router.push({name: "list", params:{page: page}});
+      this.$store.dispatch("attractionStore/" + Constant.GET_PARTIAL_ATTRACTIONS, page);
+      //this.loadPartialAttractions(this.$route.params.page);
       this.currentPage = page;
       if (this.isDataLoaded) {
-        this.$router.go(0);
+        //this.$router.go(0);
       }
     },
     detail(content_id) {
@@ -69,7 +76,7 @@ export default {
         content_id
       );
       console.log(this.$store.state.attractionStore.attraction);
-      this.$router.push({ name: "detail", query: { content_id } }).catch(() => {});
+      this.$router.push({ name: "detail", params: { content_id } }).catch(() => {});
       this.$router.go(0);
     },
   },

@@ -2,7 +2,7 @@
   <div id="app">
     <nav-bar></nav-bar>
     <side-bar></side-bar>
-    <router-view/>
+    <router-view key="$route.path"/>
     <the-footer></the-footer>
     
   </div>

@@ -37,7 +37,7 @@ const routes = [
     component: HomeView,
   },
   {
-    path: "/list",
+    path: "/list/:page",
     name: "list",
     component: AttractionListView,
   },
