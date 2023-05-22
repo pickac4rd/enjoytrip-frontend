@@ -8,8 +8,12 @@
 <script>
 import AttractionList from "../components/attraction/AttractionList.vue";
 import AttractionSearchForm from "../components/attraction/AttractionSearch.vue";
+import { mapState } from "vuex";
 export default {
   components: { AttractionList, AttractionSearchForm },
+  computed: {
+    ...mapState("attractionStore", ["attraction_list", "attraction"]),
+  },
 };
 </script>
 

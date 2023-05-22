@@ -14,6 +14,7 @@ const attractionStore = {
     partial_list: [],
     attraction_list_length: 0,
     attraction: null,
+    page: 0,
   },
   getters: {
   },
