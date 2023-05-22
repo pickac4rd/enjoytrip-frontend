@@ -9,6 +9,8 @@ import planStore from "@/store/modules/planStore";
 import boardStore from "@/store/modules/boardStore";
 import hotplaceStore from "@/store/modules/hotplaceStore";
 import userStore from "@/store/modules/userStore";
+import memberStore from "@/store/modules/memberStore";
+
 import attractionStore from "@/store/modules/attractionStore";
 
 Vue.use(Vuex);
@@ -21,6 +23,7 @@ export default new Vuex.Store({
     boardStore,
     hotplaceStore,
     userStore,
+    memberStore,
     attractionStore,
   },
   plugins: [
