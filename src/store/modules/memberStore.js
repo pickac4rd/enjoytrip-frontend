@@ -1,6 +1,7 @@
 import jwtDecode from "jwt-decode";
 import router from "@/router";
 import { login, findById, tokenRegeneration, logout } from "@/api/member";
+import http from "@/api/http";
 
 const memberStore = {
   namespaced: true,
@@ -9,6 +10,8 @@ const memberStore = {
     isLoginError: false,
     userInfo: null,
     isValidToken: false,
+    idCheck: null,
+    userid: null,
   },
   getters: {
     checkUserInfo: function (state) {
@@ -16,6 +19,9 @@ const memberStore = {
     },
     checkToken: function (state) {
       return state.isValidToken;
+    },
+    checkIdCheck: function (state) {
+      return state.idCheck;
     },
   },
   mutations: {
@@ -118,6 +124,11 @@ const memberStore = {
           }
         }
       );
+    },
+    async userDelete(context, uid) {
+      await http.delete(`user/delete/${uid}`).catch((error) => {
+        console.log(error);
+      });
     },
     async userLogout({ commit }, userid) {
       await logout(

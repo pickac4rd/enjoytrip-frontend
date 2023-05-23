@@ -29,6 +29,7 @@ export default {
   mounted() {
     this.currentPage = this.$route.params.page;
     this.$store.dispatch("attractionStore/" + Constant.GET_PARTIAL_ATTRACTIONS, 1);
+    this.$router.go(0);
   },
   data() {
     return {
