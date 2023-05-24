@@ -6,14 +6,15 @@ const attractionStore = {
   state: {
     sido_list: [],
     gugun_list: [],
-    sido_code: "",
-    gugun_code: "",
-    content_type_id: "",
-    title: "",
+    sido_code: undefined,
+    gugun_code: undefined,
+    content_type_id: undefined,
+    title: undefined,
     attraction_list: [],
     partial_list: [],
     attraction_list_length: 0,
     attraction: null,
+    cur_page: 0,
   },
   getters: {
   },
@@ -64,6 +65,7 @@ const attractionStore = {
     },
 
     [Constant.SEARCH]: (attractionStore, payload)=>{
+      
       http
         .get(`/attractions/partial/search?offset=${payload.offset*6}&limit=6&sido_code=${payload.sido_code}&gugun_code=${payload.gugun_code}&content_type_id=${payload.content_type_id}&title=${payload.title}`)
         .then((response) => {
@@ -73,7 +75,7 @@ const attractionStore = {
         });
     },
 
-    [Constant.CHANGE_SEARCH_PARAMS]: (attractionStore,sido_code, gugun_code, content_type_id,title)=>{
+    [Constant.CHANGE_SEARCH_PARAMS]: (attractionStore,{sido_code, gugun_code, content_type_id,title})=>{
       attractionStore.commit(Constant.CHANGE_SEARCH_PARAMS, {
         sido_code: sido_code,
         gugun_code: gugun_code,

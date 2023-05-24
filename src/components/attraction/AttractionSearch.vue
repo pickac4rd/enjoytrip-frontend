@@ -2,25 +2,22 @@
   <div>
     <div class="search-container">
       <select v-model="sido_code" @change="sidoChange($event);">
-        
+        <option selected="selected" value="undefined">시/도</option>
         <option v-for="sido in sido_list" :key="sido.sido_code" :value="sido.sido_code">
           {{ sido.sido_name }}
         </option>
-        <option value="-1">선택하지 않음</option>
       </select>
-      <select v-model="gugun_code">
-        
+      <select v-model="gugun_code" @change="gugunChange($event);">
+        <option selected value="undefined">구/군</option>
         <option v-for="gugun in gugun_list" :key="gugun.gugun_code" :value="gugun.gugun_code">
           {{ gugun.gugun_name }}
         </option>
-        <option value="-1">선택하지 않음</option> 
       </select>
-      <select v-model="content_type_id">
-        <option value="">종류</option>
+      <select v-model="content_type_id" @change="contentChange($event);">
+        <option selected value="undefined">종류</option>
         <option v-for="content in content_list" :key="content.id" :value="content.id">
           {{ content.name }}
         </option>
-        <option value="">선택하지 않음</option>
       </select>
       <input type="text" v-model="title" placeholder="검색어를 입력하세요" />
       <input type="submit" value="검색" @click="search"/>
@@ -40,9 +37,9 @@ export default {
   },
   data(){
     return{
-      sido_code: null,
+      sido_code: undefined,
       sido_list: [],
-      gugun_code: null,
+      gugun_code: undefined,
       gugun_list: [],
       content_list:[
         {id: 12,
@@ -62,9 +59,9 @@ export default {
         {id: 39,
         name: "음식점"},
       ],
-      title: null,
-      content_type_id: null
-    }
+      title: undefined,
+      content_type_id: undefined,
+    };
   },
   watch: {
     
@@ -83,12 +80,16 @@ export default {
     },
     gugunChange(event){
       this.gugun_code = event.target.value;
-      
+    },
+    contentChange(event){
+      this.content_type_id = event.target.value;
+      console.log(this.content_type_id)
     },
     search(){
       console.log(this.sido_code);
-      this.$store.dispatch("attractionStore/"+Constant.CHANGE_SEARCH_PARAMS,this.sido_code,this.gugun_code,this.content_type_id,this.title);
-      this.$store.dispatch("attractionStore/"+Constant.SEARCH,{offset: 1, limit: 6, sido_code: 5, gugun_code: undefined, content_type_id: undefined, title: undefined});
+      this.$store.dispatch("attractionStore/"+Constant.CHANGE_SEARCH_PARAMS,{sido_code:this.sido_code,gugun_code:this.gugun_code,content_type_id:this.content_type_id,title:this.title});
+      this.$store.state.attractionStore.cur_page = 1;
+      this.$store.dispatch("attractionStore/"+Constant.SEARCH,{offset: 1, limit: 6, sido_code: this.$store.state.attractionStore.sido_code, gugun_code: this.$store.state.attractionStore.gugun_code, content_type_id: this.$store.state.attractionStore.content_type_id, title: this.$store.state.attractionStore.title});
       
     }
   },

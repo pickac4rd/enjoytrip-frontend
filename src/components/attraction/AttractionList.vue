@@ -28,6 +28,12 @@ import http from "@/api/http"
 
 export default {
   created() {
+
+    this.$store.state.attractionStore.page = this.$route.params.page;
+    this.$store.state.attractionStore.sido_code = undefined;
+    this.$store.state.attractionStore.gugun_code = undefined;
+    this.$store.state.attractionStore.content_type_id = undefined;
+    this.$store.state.attractionStore.title = undefined;
     this.currentPage = this.$route.params.page;
     this.$store.state.attractionStore.page = this.currentPage;
     http.get("attractions/partial/length").then((response)=>{
@@ -68,19 +74,16 @@ export default {
     ]),
     pageClick(button, page) {
       this.$store.state.attractionStore.page = page;
-      this.$router.push({name: "list", params:{page: page}});
       
-      this.$store.dispatch("attractionStore/" + Constant.SEARCH, {offset: this.$store.state.attractionStore.page,limit:6,sido_code:this.$store.state.attractionStore.sido_code,
+      this.$store.dispatch("attractionStore/" + Constant.SEARCH, {offset:this.$store.state.attractionStore.page ,limit:6,sido_code:this.$store.state.attractionStore.sido_code,
       gugun_code:this.$store.state.attractionStore.gugun_code,
     content_type_id:this.$store.state.attractionStore.content_type_id,
-  title:this.$store.state.attractionStore.title})
+  title:this.$store.state.attractionStore.title});
+  this.$router.push({name: "list", params:{page: page}});
       //this.$router.go(0);
     },
     detail(content_id) {
-      this.$store.dispatch(
-        "attractionStore/" + Constant.GET_ATTRACTION,
-        content_id
-      );
+      
       this.$router.push({ name: "detail", params: { content_id:content_id } }).catch(() => {});
       //this.$router.go(0);
     },
