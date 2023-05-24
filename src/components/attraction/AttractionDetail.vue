@@ -34,8 +34,12 @@
           </div>
         </div>
         <kakao-map :attraction="attraction"></kakao-map>
+        <div class="review-list">
+          
+        </div>
       </div>
     </section>
+    
 </template>
   
 <script>

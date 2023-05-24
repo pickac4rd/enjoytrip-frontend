@@ -14,7 +14,6 @@ const attractionStore = {
     partial_list: [],
     attraction_list_length: 0,
     attraction: null,
-    page: 1,
   },
   getters: {
   },
@@ -62,8 +61,26 @@ const attractionStore = {
             attraction: response.data,
           });
         });
-      
     },
+
+    [Constant.SEARCH]: (attractionStore, payload)=>{
+      http
+        .get(`/attractions/partial/search?offset=${payload.offset*6}&limit=6&sido_code=${payload.sido_code}&gugun_code=${payload.gugun_code}&content_type_id=${payload.content_type_id}&title=${payload.title}`)
+        .then((response) => {
+          attractionStore.commit(Constant.SEARCH, {
+            attraction_list: response.data,
+          });
+        });
+    },
+
+    [Constant.CHANGE_SEARCH_PARAMS]: (attractionStore,sido_code, gugun_code, content_type_id,title)=>{
+      attractionStore.commit(Constant.CHANGE_SEARCH_PARAMS, {
+        sido_code: sido_code,
+        gugun_code: gugun_code,
+        content_type_id: content_type_id,
+        title: title,
+      })
+    }
   },
   mutations: {
     [Constant.GET_SIDOS]: (state, payload) => {
@@ -85,6 +102,17 @@ const attractionStore = {
 
     [Constant.GET_ATTRACTION]: (state, payload) => {
       state.attraction = payload.attraction;
+    },
+
+    [Constant.SEARCH]: (state,payload) => {
+      state.attraction_list = payload.attraction_list;
+    },
+
+    [Constant.CHANGE_SEARCH_PARAMS]: (state,payload) => {
+      state.sido_code = payload.sido_code;
+      state.gugun_code = payload.gugun_code;
+      state.content_type_id = payload.content_type_id;
+      state.title = payload.title;
     }
   },
 };

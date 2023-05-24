@@ -4,4 +4,6 @@ export default {
   GET_ATTRACTIONS: "getAttractions",
   GET_PARTIAL_ATTRACTIONS: "getPartialAttractions",
   GET_ATTRACTION: "getAttraction",
+  SEARCH: "searchAttraction",
+  CHANGE_SEARCH_PARAMS: "changeSearchParams",
 };
