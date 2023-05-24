@@ -74,16 +74,15 @@ export default {
     ]),
     pageClick(button, page) {
       this.$store.state.attractionStore.page = page;
-      
-      this.$store.dispatch("attractionStore/" + Constant.SEARCH, {offset:this.$store.state.attractionStore.page ,limit:6,sido_code:this.$store.state.attractionStore.sido_code,
-      gugun_code:this.$store.state.attractionStore.gugun_code,
-    content_type_id:this.$store.state.attractionStore.content_type_id,
-  title:this.$store.state.attractionStore.title});
-  this.$router.push({name: "list", params:{page: page}});
-      //this.$router.go(0);
+      this.$router.push({name: "list", params:{page: page}});
+      this.$router.go(0)
     },
     detail(content_id) {
-      
+      this.$store.dispatch(
+        "attractionStore/" + Constant.GET_ATTRACTION,
+        content_id
+      );
+      console.log(this.$store.state.attractionStore.attraction);
       this.$router.push({ name: "detail", params: { content_id:content_id } }).catch(() => {});
       //this.$router.go(0);
     },

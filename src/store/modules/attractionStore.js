@@ -65,6 +65,16 @@ const attractionStore = {
     },
 
     [Constant.SEARCH]: (attractionStore, payload)=>{
+      http
+        .get(`/attractions/partial/search?offset=${payload.offset*6}&limit=6&sido_code=${payload.sido_code}&gugun_code=${payload.gugun_code}&content_type_id=${payload.content_type_id}&title=${payload.title}`)
+        .then((response) => {
+          attractionStore.commit(Constant.SEARCH, {
+            attraction_list: response.data,
+          });
+        });
+    },
+
+    [Constant.SEARCH]: (attractionStore, payload)=>{
       
       http
         .get(`/attractions/partial/search?offset=${payload.offset*6}&limit=6&sido_code=${payload.sido_code}&gugun_code=${payload.gugun_code}&content_type_id=${payload.content_type_id}&title=${payload.title}`)
