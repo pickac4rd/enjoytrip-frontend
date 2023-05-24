@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="search-container">
-      <select v-model="sido_code">
+      <select v-model="sido_code" @change="sidoChange($event);">
         <option value="">시/도</option>
-        <option v-for="sido in sido_list" :key="sido.sido_code">
+        <option v-for="sido in sido_list" :key="sido.sido_code" :value="sido.sido_code">
           {{ sido.sido_name }}
         </option>
         <option value="">선택하지 않음</option>
       </select>
       <select v-model="gugun_code">
         <option value="">구/군</option>
-        <option value="option4">Option 4</option>
-        <option value="option5">Option 5</option>
-        <option value="option6">Option 6</option>
-        <option value="">선택하지 않음</option>
+        <option v-for="gugun in gugun_list" :key="gugun.gugun_code">
+          {{ gugun.gugun_name }}
+        </option>
+        <option value="">선택하지 않음</option> 
       </select>
       <select v-model="content_type_id">
         <option value="">종류</option>
@@ -23,21 +23,32 @@
         <option value="">선택하지 않음</option>
       </select>
       <input type="text" v-model="title" placeholder="검색어를 입력하세요" />
-      <input type="submit" value="검색" @click="search" />
+      <input type="submit" value="검색"/>
     </div>
   </div>
 </template>
 
 <script>
 import { mapMutations, mapState, mapActions } from "vuex";
+import http from "@/api/http";
 import Constant from "../../store/constant/Constant";
 export default {
   created() {
-    this.$store.dispatch("attractionStore/" + Constant.GET_SIDOS);
+    http.get("attractions/sido").then((response) => {
+        this.$store.state.attractionStore.sido_list = response.data
+      });
+  },
+  data(){
+    return{
+    }
+  },
+  watch: {
+    
   },
   computed: {
     ...mapState("attractionStore", [
       "sido_list",
+      "gugun_list",
       "sido_code",
       "gugun_code",
       "content_type_id",
@@ -45,8 +56,13 @@ export default {
     ]),
   },
   methods: {
-    ...mapActions("attractionStore", [Constant.GET_SIDOS]),
-    ...mapMutations("attractionStore", [Constant.GET_SIDOS]),
+    ...mapActions("attractionStore", [Constant.GET_SIDOS, Constant.GET_GUGUNS]),
+    ...mapMutations("attractionStore", [Constant.GET_SIDOS, Constant.GET_GUGUNS]),
+    sidoChange(event){
+      http.get("attractions/sido/" + `${event.target.value}`).then((response)=>{
+        this.$store.state.attractionStore.gugun_list = response.data
+      })
+    }
   },
 };
 </script>

@@ -26,9 +26,11 @@ import Constant from "../../store/constant/Constant";
 //import http from "@/api/http"
 
 export default {
-  mounted() {
+  created() {
     this.currentPage = this.$route.params.page;
-    this.$store.dispatch("attractionStore/" + Constant.GET_PARTIAL_ATTRACTIONS, 1);
+    this.$store.state.attractionStore.page = this.currentPage;
+    this.$store.dispatch("attractionStore/" + Constant.GET_PARTIAL_ATTRACTIONS, this.$store.state.attractionStore.page);
+    this.$forceUpdate();
   },
   data() {
     return {
@@ -37,13 +39,18 @@ export default {
       isDataLoaded: false,
     };
   },
-  computed: {
-    ...mapState("attractionStore", ["attraction_list", "attraction"]),
+  props:{
+    attraction_list: Array
   },
-  watch:{
-    attraction_list: function(value){
-      console.log(value)
-    }
+  watch: {
+  currentPage(newPage) {
+      this.$store.state.attractionStore.page = newPage;
+      this.$store.dispatch("attractionStore/" + Constant.GET_PARTIAL_ATTRACTIONS, this.$store.state.attractionStore.page);
+    },
+  },
+  computed: {
+    ...mapState("attractionStore", ["attraction_list", "attraction", "page"]),
+    
   },
   methods: {
     ...mapActions("attractionStore", [
@@ -54,21 +61,10 @@ export default {
       Constant.GET_PARTIAL_ATTRACTIONS,
       Constant.GET_ATTRACTION,
     ]),
-    async loadPartialAttractions(offset) {
-      await this.$store.dispatch(
-        "attractionStore/" + Constant.GET_PARTIAL_ATTRACTIONS,
-        offset
-      );
-      this.isDataLoaded = true;
-    },
-    async pageClick(button, page) {
+    pageClick(button, page) {
+      this.$store.state.attractionStore.page = page;
       this.$router.push({name: "list", params:{page: page}});
-      this.$store.dispatch("attractionStore/" + Constant.GET_PARTIAL_ATTRACTIONS, page);
-      //this.loadPartialAttractions(this.$route.params.page);
-      this.currentPage = page;
-      if (this.isDataLoaded) {
-        //this.$router.go(0);
-      }
+      this.$router.go(0)
     },
     detail(content_id) {
       this.$store.dispatch(
@@ -76,7 +72,7 @@ export default {
         content_id
       );
       console.log(this.$store.state.attractionStore.attraction);
-      this.$router.push({ name: "detail", params: { content_id } }).catch(() => {});
+      this.$router.push({ name: "detail", params: { content_id:content_id } }).catch(() => {});
       this.$router.go(0);
     },
   },

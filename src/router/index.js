@@ -18,7 +18,7 @@ const routes = [
     component: AttractionListView,
   },
   {
-    path: "/detail",
+    path: "/detail/:content_id",
     name: "detail",
     component: AttractionDetailView,
   }

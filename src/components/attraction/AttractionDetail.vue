@@ -2,8 +2,6 @@
     <section id="spot_detail" data-aos="zoom-in-up">
       <div v-if="attraction" class="container" style="min-height: 750px">
         
-        
-        
         <div class="section-header">
           <h2 id="spot_title">{{ attraction.title }}</h2>
         </div>

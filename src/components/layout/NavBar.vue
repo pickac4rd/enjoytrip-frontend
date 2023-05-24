@@ -14,7 +14,7 @@
             <router-link to="/">홈</router-link>
           </li>
           <li>
-            <router-link to="/list">관광지 검색</router-link>
+            <router-link to="/list/1">관광지 검색</router-link>
           </li>
           <li>
             <router-link to="/board">게시판</router-link>

@@ -14,7 +14,7 @@ const attractionStore = {
     partial_list: [],
     attraction_list_length: 0,
     attraction: null,
-    page: 0,
+    page: 1,
   },
   getters: {
   },
@@ -27,8 +27,12 @@ const attractionStore = {
       });
     },
 
-    [Constant.GET_GUGUNS]: (attractionStore, sido_code)=>{
-      http.get("/attractions/sido/" + sido_code)
+    [Constant.GET_GUGUNS]: (attractionStore, newSidoCode)=>{
+      http.get("/attractions/sido/" + `${newSidoCode}`).then((response) => {
+        attractionStore.commit(Constant.GET_GUGUNS, {
+          gugun_list: response.data,
+        });
+      })
 
     },
 
@@ -65,6 +69,10 @@ const attractionStore = {
     [Constant.GET_SIDOS]: (state, payload) => {
       //console.log(payload.sido_list);
       state.sido_list = payload.sido_list;
+    },
+
+    [Constant.GET_GUGUNS]: (state,payload) => {
+      state.gugun_list = payload.gugun_list;
     },
 
     [Constant.GET_ATTRACTIONS]: (state, payload) => {
