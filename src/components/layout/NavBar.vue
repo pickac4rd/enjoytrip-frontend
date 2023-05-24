@@ -53,10 +53,13 @@ export default {
   name: "NavBar",
   computed: {
     ...mapState("userStore", ["isLogin", "userInfo"]),
+    // ...mapState("memberStore", ["isLogin", "userInfo"]),
   },
   methods: {
     ...mapActions("userStore", ["userLogout"]),
+    // ...mapActions("memberStore", ["userLogout"]),
     logout() {
+      this.$swal("가라. 멀리 안나간다.")
       this.userLogout(this.userInfo.id);
       sessionStorage.removeItem("access-token"); //저장된 토큰 없애기
       sessionStorage.removeItem("refresh-token"); //저장된 토큰 없애기
