@@ -55,6 +55,7 @@ const userStore = {
     SET_TEMP_PW: (state, tempPw) => {
       state.tempPw = tempPw;
     },
+
   },
   actions: {
     async userConfirm({ commit }, user) {
@@ -187,7 +188,8 @@ const userStore = {
         });
     },
     async userDelete(context, uid) {
-      await http.delete(`user/delete/${uid}`).catch((error) => {
+      await http.delete(`user/delete/${uid}`)
+        .catch((error) => {
         console.log(error);
       });
     },

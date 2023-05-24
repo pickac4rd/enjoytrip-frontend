@@ -1,85 +1,103 @@
 <template>
-<section id="login" style="pb-0" data-aos="zoom-in-up">
-    <!-- <div class="container" style="min-height: 750px"> -->
+  <section id="login" style="pb-0" data-aos="zoom-in-up">
+    <div class="container" style="min-height: 750px">
       <div class="section-header">
         <h2>로그인</h2>
-        <p>저희와 함께 새로운 여행을 떠나보세요</p>
+        <p>EnjoyTrip와 함께 새로운 여행을 떠나보세요</p>
       </div>
-    <!-- </div> -->
-  <b-container class="bv-example-row mt-3">
-    <b-row>
-      <b-col></b-col>
-      <b-col>
-        <b-card class="text-center mt-3" style="max-width: 40rem" align="left">
-          <b-form class="text-left">
-            <b-alert show variant="danger" v-if="isLoginError">아이디 또는 비밀번호를 확인하세요.</b-alert>
-            <b-form-group label="아이디:" label-for="userid">
-              <b-form-input
-                id="userid"
-                v-model="user.userid"
-                required
-                placeholder="아이디 입력...."
-                @keyup.enter="confirm"
-              ></b-form-input>
-            </b-form-group>
-            <b-form-group label="비밀번호:" label-for="userpwd">
-              <b-form-input
-                type="password"
-                id="userpwd"
-                v-model="user.userpwd"
-                required
-                placeholder="비밀번호 입력...."
-                @keyup.enter="confirm"
-              ></b-form-input>
-            </b-form-group>
-            <b-button type="button" variant="primary" class="m-1" @click="confirm">로그인</b-button>
-            <b-button type="button" variant="success" class="m-1" @click="movePage">회원가입</b-button>
-          </b-form>
-        </b-card>
-      </b-col>
-      <b-col></b-col>
-    </b-row>
-  </b-container>
+
+      <div class="d-flex p-3 m-3 justify-content-center align-items-center">
+        <form class="text-center" id="login-form" method="POST" style="width: 50%">
+          <b-alert show variant="danger" v-if="isLoginError"
+            >아이디 또는 비밀번호를 확인하세요.</b-alert
+          >
+          <input
+            type="text"
+            class="login-form-item form-control border rounded-5 p-3 mb-3"
+            id="login-form-id"
+            name="id"
+            placeholder="아이디"
+            v-model="user.id"
+            @keyup.enter="confirm"
+          />
+          <input
+            type="password"
+            class="login-form-item form-control border rounded-5 p-3 mb-3"
+            id="login-form-pw"
+            name="pwd"
+            placeholder="비밀번호"
+            v-model="user.pwd"
+            @keyup.enter="confirm"
+          />
+          <button
+            type="button"
+            class="btn-default me-2 mt-4 mb-4 w-100"
+            id="btn-login"
+            @click="confirm"
+          >
+            로그인
+          </button>
+          <br />
+          <div class="mt-3">
+            <a class="login-options" @click="moveJoin">회원 가입 </a> |
+            <a class="login-options" @click="moveFindId">아이디 찾기</a> |
+            <a class="login-options" @click="moveFindPw">비밀번호 찾기</a><br />
+          </div>
+        </form>
+      </div>
+    </div>
   </section>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-
-const memberStore = "memberStore";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
   name: "UserLogin",
   data() {
     return {
-      // isLoginError: false,
       user: {
-        userid: null,
-        userpwd: null,
+        id: null,
+        pwd: null,
       },
     };
   },
   computed: {
-    ...mapState(memberStore, ["isLogin", "isLoginError", "userInfo"]),
+    ...mapState("userStore", ["isLogin", "isLoginError", "userInfo"]),
   },
   methods: {
-    ...mapActions(memberStore, ["userConfirm", "getUserInfo"]),
+    ...mapMutations("userStore", ["SET_IS_LOGIN_ERROR"]),
+    ...mapActions("userStore", ["userConfirm", "getUserInfo"]),
+
+
+
     async confirm() {
       await this.userConfirm(this.user);
       let token = sessionStorage.getItem("access-token");
-      console.log("1. confirm() token >> " + token + this.isLogin);
       if (this.isLogin) {
         await this.getUserInfo(token);
-        console.log("4. confirm() userInfo :: ", this.userInfo);
-        this.$router.push({ name: "main" });
+        this.$swal("도우너 어서오고.")
+        this.$router.push({ name: "home" });
       }
     },
-    movePage() {
-      console.log("??????")
+    moveJoin() {
       this.$router.push({ name: "join" });
     },
+    moveFindId() {
+      this.$router.push({ name: "findId" });
+    },
+    moveFindPw() {
+      this.$router.push({ name: "findPw" });
+    },
+  },
+  mounted() {
+    this.SET_IS_LOGIN_ERROR(false);
   },
 };
 </script>
 
-<style></style>
+<style>
+.login-options:hover {
+  cursor: pointer;
+}
+</style>

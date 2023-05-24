@@ -90,37 +90,39 @@ export default {
     };
   },
   computed: {
-    ...mapState("userStore", ["userInfo", "isLogin"]),
+    ...mapState("memberStore", ["userInfo", "isLogin"]),
   },
   methods: {
-    ...mapActions("userStore", ["userModify", "userConfirm", "getUserInfo"]),
+    ...mapActions("memberStore", ["userModify", "userConfirm", "getUserInfo"]),
 
     handleFileChange(e) {
       this.file = e.target.files[0];
     },
     async modifyUser() {
       if (!this.userInfo.name) {
-        this.$swal("이름을 입력해주세요!!");
+        alert("이름을 입력해주세요!!");
         return;
       } else if (!this.userInfo.email) {
-        this.$swal("이메일을 입력해주세요!!");
+        alert("이메일을 입력해주세요!!");
         return;
       } else if (!this.pwd) {
-        this.$swal("비밀번호를 입력해주세요!!");
+        alert("비밀번호를 입력해주세요!!");
         return;
       } else if (!this.pwdCheck) {
-        this.$swal("비밀번호 확인을 입력해주세요!!");
+        alert("비밀번호 확인을 입력해주세요!!");
         return;
       } else if (!this.isEmail) {
-        this.$swal("올바른 이메일 형식이 아닙니다!!");
+        alert("올바른 이메일 형식이 아닙니다!!");
         return;
       } else if (!this.pwdConfirm) {
-        this.$swal("비밀번호가 일치하지 않습니다!!");
+        alert("비밀번호가 일치하지 않습니다!!");
         return;
-      } else if (!this.file) {
-        this.$swal("프로필 이미지 파일을 선택해주세요!!");
-        return;
-      } else {
+      }
+      //  else if (!this.file) {
+      //   alert("프로필 이미지 파일을 선택해주세요!!");
+      //   return;
+      // } 
+      else {
         let data = new FormData();
         data.append("uid", this.userInfo.uid);
         data.append("id", this.userInfo.id);

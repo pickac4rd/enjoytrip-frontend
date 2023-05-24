@@ -20,7 +20,7 @@
             <router-link to="/board">게시판</router-link>
           </li>
           <li v-if="userInfo">
-            <router-link to="/user/mypage">내 프로필</router-link>
+            <router-link to="/user/profile">내 프로필</router-link>
           </li>
         </ul>
         <b-icon icon="list" class="mobile-nav-toggle d-none"></b-icon>
@@ -52,13 +52,14 @@ import { mapState, mapActions } from "vuex";
 export default {
   name: "NavBar",
   computed: {
-    // ...mapState("userStore", ["isLogin", "userInfo"]),
-    ...mapState("memberStore", ["isLogin", "userInfo"]),
+    ...mapState("userStore", ["isLogin", "userInfo"]),
+    // ...mapState("memberStore", ["isLogin", "userInfo"]),
   },
   methods: {
-    // ...mapActions("userStore", ["userLogout"]),
-    ...mapActions("memberStore", ["userLogout"]),
+    ...mapActions("userStore", ["userLogout"]),
+    // ...mapActions("memberStore", ["userLogout"]),
     logout() {
+      this.$swal("가라. 멀리 안나간다.")
       this.userLogout(this.userInfo.id);
       sessionStorage.removeItem("access-token"); //저장된 토큰 없애기
       sessionStorage.removeItem("refresh-token"); //저장된 토큰 없애기

@@ -11,14 +11,14 @@ Vue.use(VueRouter);
 
 // https://v3.router.vuejs.org/kr/guide/advanced/navigation-guards.html
 const onlyAuthUser = async (to, from, next) => {
-  const checkUserInfo = store.getters["memberStore/checkUserInfo"];
-  const checkToken = store.getters["memberStore/checkToken"];
+  const checkUserInfo = store.getters["userStore/checkUserInfo"];
+  const checkToken = store.getters["userStore/checkToken"];
   let token = sessionStorage.getItem("access-token");
   console.log("로그인 처리 전", checkUserInfo, token);
 
   if (checkUserInfo != null && token) {
     console.log("토큰 유효성 체크하러 가자!!!!");
-    await store.dispatch("memberStore/getUserInfo", token);
+    await store.dispatch("userStore/getUserInfo", token);
   }
   if (!checkToken || checkUserInfo === null) {
     alert("로그인이 필요한 페이지입니다..");
@@ -33,7 +33,7 @@ const onlyAuthUser = async (to, from, next) => {
 const routes = [
   {
     path: "/",
-    name: "main",
+    name: "home",
     component: HomeView,
   },
   {
@@ -49,23 +49,39 @@ const routes = [
   {
     path: "/user",
     name: "user",
-    component: () => import(/* webpackChunkName: "user" */ "@/views/AppUser"),
+    component: () => import("@/views/UserView"),
     children: [
-      {
-        path: "join",
-        name: "join",
-        component: () => import(/* webpackChunkName: "user" */ "@/components/user/UserRegister"),
-      },
       {
         path: "login",
         name: "login",
-        component: () => import(/* webpackChunkName: "user" */ "@/components/user/UserLogin"),
+        component: () => import("@/components/user/UserLogin"),
       },
       {
-        path: "mypage",
-        name: "mypage",
+        path: "join",
+        name: "join",
+        component: () => import("@/components/user/UserJoin"),
+      },
+      {
+        path: "profile",
+        name: "profile",
         beforeEnter: onlyAuthUser,
-        component: () => import(/* webpackChunkName: "user" */ "@/components/user/UserMyPage"),
+        component: () => import("@/components/user/UserProfile"),
+      },
+      {
+        path: "modify",
+        name: "modify",
+        beforeEnter: onlyAuthUser,
+        component: () => import("@/components/user/UserModify"),
+      },
+      {
+        path: "findId",
+        name: "findId",
+        component: () => import("@/components/user/UserFindId"),
+      },
+      {
+        path: "findPw",
+        name: "findPw",
+        component: () => import("@/components/user/UserFindPw"),
       },
     ],
   },

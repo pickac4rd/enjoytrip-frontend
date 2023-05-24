@@ -1,67 +1,64 @@
 <template>
-  <section id="modifyProfile" style="pb-0" data-aos="zoom-in-out" v-if="userInfo">
-    <div class="container" style="min-height: 650px">
+  <section id="join" style="pb-0" data-aos="zoom-in-up">
+    <div class="container" style="min-height: 750px">
       <div class="section-header">
-        <h2>프로필 수정</h2>
+        <h2>회원 가입</h2>
+        <p>EnjoyTrip에 가입하고 더 많은 여행 정보를 얻어보세요</p>
       </div>
 
       <div class="d-flex p-3 m-3 justify-content-center align-items-center">
-        <form class="text-center" id="modify-form" method="POST" style="width: 50%">
+        <form class="text-center" id="signup-form" style="width: 50%">
           <input
             type="text"
-            class="login-form-item form-control border rounded-5 p-3 mb-3 input-success"
-            id="modify-form-id"
+            class="login-form-item form-control border rounded-5 p-3 mb-3"
+            :class="idValid"
+            id="signup-form-id"
             name="id"
             placeholder="아이디"
-            v-model="userInfo.id"
-            disabled
+            v-model="user.id"
+            @keyup="checkId"
           />
+          <div id="idcheck-result"></div>
           <input
             type="text"
             class="login-form-item form-control border rounded-5 p-3 mb-3"
             :class="nameValid"
-            id="modify-form-name"
+            id="signup-form-name"
             name="name"
             placeholder="이름"
-            v-model="userInfo.name"
+            v-model="user.name"
           />
+          <div id="emailcheck-result"></div>
           <input
             type="email"
             class="login-form-item form-control border rounded-5 p-3 mb-3"
             :class="emailValid"
-            id="modify-form-email"
+            id="signup-form-email"
             name="email"
             placeholder="E-mail"
-            v-model="userInfo.email"
+            v-model="user.email"
           />
-          <div id="emailcheck-result"></div>
           <input
             type="password"
             class="login-form-item form-control border rounded-5 p-3 mb-3"
             :class="pwdValid"
-            id="modify-form-pwd"
+            id="signup-form-pwd"
             name="pwd"
             placeholder="비밀번호"
-            v-model="pwd"
+            v-model="user.pwd"
           /><input
             type="password"
             class="login-form-item form-control border rounded-5 p-3 mb-3"
             :class="pwdCheckValid"
-            id="modify-form-pwd-confirm"
+            id="signup-form-pwd-confirm"
             placeholder="비밀번호 확인"
             v-model="pwdCheck"
+            @keyup.enter="userJoin"
           />
-          <input
-            type="file"
-            accept="image/*"
-            class="login-form-item form-control border rounded-5 mb-3"
-            style="height: 45px"
-            placeholder="프로필 사진"
-            @change="handleFileChange"
-          />
+          <div id="pwdcheck-result"></div>
 
-          <button type="button" class="btn-default ms-2 mt-4 mb-4 w-100" id="btn-modify" @click="modifyUser">
-            회원정보 수정
+          <button type="button" class="btn-default ms-2 mt-4 mb-4 w-100" id="btn-signup" @click="userJoin">
+            회원가입
           </button>
         </form>
       </div>
@@ -70,46 +67,60 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 
 export default {
-  name: "UserModify",
+  name: "UserJoin",
   data() {
     return {
-      pwd: null,
-      pwdCheck: null,
-      nameValid: "input-success",
-      emailValid: "input-success",
+      idValid: null,
+      nameValid: null,
+      emailValid: null,
       pwdValid: null,
       pwdCheckValid: null,
-      file: null,
-      isEmail: true,
+      isUseId: false,
+      isEmail: false,
       pwdConfirm: false,
+      user: {
+        id: null,
+        name: null,
+        email: null,
+        pwd: null,
+      },
+      pwdCheck: null,
       /* eslint-disable-next-line */
       reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
     };
   },
   computed: {
-    ...mapState("userStore", ["userInfo", "isLogin"]),
+    ...mapState("userStore", ["idCheck"]),
   },
   methods: {
-    ...mapActions("userStore", ["userModify", "userConfirm", "getUserInfo"]),
+    ...mapGetters("userStore", ["checkIdCheck"]),
+    ...mapActions("userStore", ["getIdCheck", "userSignup"]),
 
-    handleFileChange(e) {
-      this.file = e.target.files[0];
+    checkId() {
+      this.getIdCheck(this.user.id);
     },
-    async modifyUser() {
-      if (!this.userInfo.name) {
+
+    userJoin() {
+      if (!this.user.id) {
+        this.$swal("아이디를 입력해주세요!!");
+        return;
+      } else if (!this.user.name) {
         this.$swal("이름을 입력해주세요!!");
         return;
-      } else if (!this.userInfo.email) {
+      } else if (!this.user.email) {
         this.$swal("이메일을 입력해주세요!!");
         return;
-      } else if (!this.pwd) {
+      } else if (!this.user.pwd) {
         this.$swal("비밀번호를 입력해주세요!!");
         return;
       } else if (!this.pwdCheck) {
         this.$swal("비밀번호 확인을 입력해주세요!!");
+        return;
+      } else if (!this.isUseId) {
+        this.$swal("이미 사용중인 아이디입니다!!");
         return;
       } else if (!this.isEmail) {
         this.$swal("올바른 이메일 형식이 아닙니다!!");
@@ -117,44 +128,44 @@ export default {
       } else if (!this.pwdConfirm) {
         this.$swal("비밀번호가 일치하지 않습니다!!");
         return;
-      } else if (!this.file) {
-        this.$swal("프로필 이미지 파일을 선택해주세요!!");
-        return;
       } else {
-        let data = new FormData();
-        data.append("uid", this.userInfo.uid);
-        data.append("id", this.userInfo.id);
-        data.append("name", this.userInfo.name);
-        data.append("email", this.userInfo.email);
-        data.append("pwd", this.pwd);
-        data.append("image", this.userInfo.image);
-        data.append("upfile", this.file);
-
-        await this.userModify(data);
-
-        await this.userConfirm({ id: this.userInfo.id, pwd: this.pwd });
-        let token = sessionStorage.getItem("access-token");
-        if (this.isLogin) {
-          await this.getUserInfo(token);
-          this.$router.push({ name: "profile" });
-        }
+        this.userSignup(this.user);
       }
     },
   },
   watch: {
-    "userInfo.name": function () {
-      if (!this.userInfo.name) {
+    "user.id": function () {
+      if (!this.user.id) {
+        this.idValid = null;
+      } else if (this.user.id.length < 5 || this.user.id.length > 16) {
+        this.idValid = "input-fail";
+      } else {
+        this.idValid = "input-success";
+      }
+    },
+    idCheck() {
+      if (this.idCheck == 0) {
+        this.idValid = "input-success";
+        this.isUseId = true;
+      } else {
+        this.idValid = "input-fail";
+        this.isUseId = false;
+      }
+    },
+
+    "user.name": function () {
+      if (!this.user.name) {
         this.nameValid = null;
       } else {
         this.nameValid = "input-success";
       }
     },
 
-    "userInfo.email": function () {
-      if (!this.userInfo.email) {
+    "user.email": function () {
+      if (!this.user.email) {
         this.emailValid = null;
         this.isEmail = false;
-      } else if (!this.reg.test(this.userInfo.email)) {
+      } else if (!this.reg.test(this.user.email)) {
         this.emailValid = "input-fail";
         this.isEmail = false;
       } else {
@@ -163,18 +174,17 @@ export default {
       }
     },
 
-    pwd() {
-      if (!this.userInfo.pwd) {
+    "user.pwd": function () {
+      if (!this.user.pwd) {
         this.pwdValid = null;
       }
     },
     pwdCheck() {
       if (!this.pwdCheck) {
-        this.pwdValid = null;
         this.pwdCheckValid = null;
         this.pwdConfirm = false;
       }
-      if (this.pwdCheck == this.pwd) {
+      if (this.pwdCheck == this.user.pwd) {
         this.pwdValid = "input-success";
         this.pwdCheckValid = "input-success";
         this.pwdConfirm = true;
