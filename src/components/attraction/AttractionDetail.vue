@@ -40,7 +40,7 @@
         </div>
       </div>
       <kakao-map :attraction="attraction"></kakao-map>
-      <!-- <br />
+      <br />
       <br />
       <br />
       <div>
@@ -48,12 +48,18 @@
         <br />
         <br />
         <br />
-        <b-textarea
-          placeholder="댓글을 입력하세요"
-          v-model="context"
-        ></b-textarea>
-        <b-button @click="createComment">댓글달기</b-button>
-      </div> -->
+        <b-textarea placeholder="댓글을 입력하세요" v-model="text"></b-textarea>
+        <b-button @click="createComment()">댓글달기</b-button>
+      </div>
+      <br />
+      <div class="reviews" v-if="review_list.length">
+        <div v-for="review in review_list" :key="review.review_id">
+          <span>ID : {{ review.userId }}</span
+          ><br />
+          <span>내용 : {{ review.content }}</span>
+          <hr />
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -61,7 +67,7 @@
 <script>
 import KakaoMap from "@/components/attraction/KakaoMap.vue";
 import Constant from "@/store/constant/Constant";
-import { mapState } from "vuex";
+import { mapMutations, mapState, mapActions } from "vuex";
 export default {
   name: "AttractionDetail",
   components: {
@@ -73,13 +79,50 @@ export default {
       this.$route.params.content_id
     );
   },
+  created() {
+    this.$store.dispatch("attractionStore/" + Constant.GET_REVIEW, {
+      content_id: this.$route.params.content_id,
+    });
+  },
   data() {
-    return {};
+    return {
+      text: "",
+    };
   },
   computed: {
-    ...mapState("attractionStore", ["attraction_list", "attraction"]),
+    ...mapState("attractionStore", [
+      "attraction_list",
+      "attraction",
+      "review_list",
+    ]),
   },
-  methods: {},
+  methods: {
+    ...mapActions("attractionStore", [
+      Constant.GET_REVIEW,
+      Constant.POST_REVIEW,
+    ]),
+    ...mapMutations("attractionStore", [
+      Constant.GET_REVIEW,
+      Constant.POST_REVIEW,
+    ]),
+    createComment() {
+      const newReview = {
+        content_id: this.$route.params.content_id,
+        userId: "testId",
+        title: "testTitle",
+        content: this.text,
+        star: "1",
+      };
+      this.$store
+        .dispatch("attractionStore/" + Constant.POST_REVIEW, {
+          newReview: newReview,
+          content_id: this.$route.params.content_id,
+        })
+        .then(() => {
+          this.text = "";
+        });
+    },
+  },
 
   watch: {},
 };

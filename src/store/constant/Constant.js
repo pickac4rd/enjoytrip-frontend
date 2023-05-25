@@ -6,4 +6,6 @@ export default {
   GET_ATTRACTION: "getAttraction",
   SEARCH: "searchAttraction",
   CHANGE_SEARCH_PARAMS: "changeSearchParams",
+  GET_REVIEW: "getReview",
+  POST_REVIEW: "postReview",
 };

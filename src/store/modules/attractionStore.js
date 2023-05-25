@@ -98,6 +98,14 @@ const attractionStore = {
           });
         });
     },
+
+    [Constant.POST_REVIEW]: (attractionStore, param) => {
+      http
+        .post("/attractions/review/" + `${param.content_id}`, param.newReview)
+        .then(() => {
+          attractionStore.dispatch(Constant.GET_REVIEW, param);
+        });
+    },
   },
   mutations: {
     [Constant.GET_SIDOS]: (state, payload) => {
