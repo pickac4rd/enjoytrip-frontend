@@ -31,7 +31,7 @@ export default {
       url_base: "https://api.openweathermap.org/data/2.5/",
       query: "",
       weather: {},
-    }
+    };
   },
   methods: {
     fetchWeather: function (e) {

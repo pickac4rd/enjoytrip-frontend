@@ -34,12 +34,17 @@
           </div>
         </div>
         <kakao-map :attraction="attraction"></kakao-map>
+        <div class="review-list">
+          
+        </div>
       </div>
     </section>
+    
 </template>
   
 <script>
   import KakaoMap from "@/components/attraction/KakaoMap.vue"
+  import Constant from "@/store/constant/Constant";
   import { mapState } from "vuex";
   export default {
     name: "AttractionDetail",
@@ -47,9 +52,12 @@
       KakaoMap,
     },
     created(){
+      this.$store.dispatch("attractionStore/"+Constant.GET_ATTRACTION,this.$route.params.content_id);
     },
     data() {
-      return {};
+      return {
+
+      };
     },
     
     computed: {
