@@ -3,6 +3,9 @@ import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import AttractionListView from "../views/AttractionListView.vue";
 import AttractionDetailView from "../views/AttractionDetailView.vue"
+// import BoardDetailView from "../views/BoardDetailView.vue"
+// import BoardView from "../views/BoardView.vue"
+// import BoardModifyView from "../views/BoardModifyView.vue"
 
 import store from "@/store";
 
@@ -82,6 +85,43 @@ const routes = [
         path: "findPw",
         name: "findPw",
         component: () => import("@/components/user/UserFindPw"),
+      },
+    ],
+  },
+  {
+    path: "/board",
+    name: "board",
+    component: () => import(/* webpackChunkName: "board" */ "@/views/AppBoard"),
+    redirect: "/board/list",
+    children: [
+      {
+        path: "list",
+        name: "boardlist",
+        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardList"),
+      },
+      {
+        path: "write",
+        name: "boardwrite",
+        beforeEnter: onlyAuthUser,
+        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardWrite"),
+      },
+      {
+        path: "view/:articleno",
+        name: "boardview",
+        beforeEnter: onlyAuthUser,
+        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardView"),
+      },
+      {
+        path: "modify",
+        name: "boardmodify",
+        beforeEnter: onlyAuthUser,
+        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardModify"),
+      },
+      {
+        path: "delete/:articleno",
+        name: "boarddelete",
+        beforeEnter: onlyAuthUser,
+        component: () => import(/* webpackChunkName: "board" */ "@/components/board/BoardDelete"),
       },
     ],
   },

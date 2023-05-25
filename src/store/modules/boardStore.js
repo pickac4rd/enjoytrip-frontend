@@ -4,7 +4,6 @@ const boardStore = {
   namespaced: true,
   state: {
     board: null,
-    boardSpots: [],
     boards: [],
   },
   getters: {},
@@ -15,35 +14,19 @@ const boardStore = {
     CLEAR_BOARD_LIST(state) {
       state.boards = [];
     },
-    CLEAR_BOARDSPOT_LIST(state) {
-      state.boardSpots = [];
-    },
     SET_BOARD(state, board) {
       state.board = board;
     },
     SET_BOARD_LIST(state, boards) {
       state.boards = boards;
     },
-    SET_BOARDSPOT_LIST(state, boardSpots) {
-      state.boardSpots = boardSpots;
-    },
   },
   actions: {
     getBoardList({ commit }) {
       http
-        .get(`/board/getSchedule`)
+        .get(`/board`)
         .then(({ data }) => {
           commit("SET_BOARD_LIST", data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    getBoardspotList({ commit }, boardid) {
-      http
-        .get(`/board/view/schedulespot/${boardid}`)
-        .then(({ data }) => {
-          commit("SET_BOARDSPOT_LIST", data);
         })
         .catch((error) => {
           console.log(error);

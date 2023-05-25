@@ -1,7 +1,9 @@
 <template>
   <div id="app">
+    <section id="attraction">
     <attraction-search-form></attraction-search-form>
     <attraction-list v-bind:attraction_list="attraction_list"></attraction-list>
+    </section>
   </div>
 </template>
 

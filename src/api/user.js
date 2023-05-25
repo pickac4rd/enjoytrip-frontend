@@ -17,5 +17,8 @@ async function tokenRegeneration(user, success, fail) {
 async function logout(userid, success, fail) {
   await http.get(`/user/logout/${userid}`).then(success).catch(fail);
 }
+async function userDelete(uid, success, fail) {
+  await http.delete(`/user/delete/${uid}`).then(success).catch(fail);
+}
 
-export { login, findById, tokenRegeneration, logout };
+export { login, findById, tokenRegeneration, logout, userDelete };

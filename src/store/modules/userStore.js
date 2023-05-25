@@ -1,6 +1,6 @@
 import jwtDecode from "jwt-decode";
 import router from "@/router";
-import { login, findById, tokenRegeneration, logout } from "@/api/user";
+import { login, findById, tokenRegeneration, logout,userDelete } from "@/api/user";
 import http from "@/api/http";
 
 const userStore = {
@@ -20,8 +20,8 @@ const userStore = {
       return state.userInfo;
     },
     checkToken: function (state) {
-      return state.isValidToken;
-    },
+      return state.isValidToken;}
+    ,
     checkIdCheck: function (state) {
       return state.idCheck;
     },
@@ -166,6 +166,25 @@ const userStore = {
         }
       );
     },
+    async userDelete({ commit }, uid) {
+      await userDelete(
+        uid,
+        async ({ data }) => {
+          if (data.message === "success") {
+            console.log(data)
+            await http.delete(`user/delete/${uid}`)
+            commit("SET_IS_LOGIN", false);
+            commit("SET_USER_INFO", null);
+            commit("SET_IS_VALID_TOKEN", false);
+          } else {
+            console.log("유저 정보 없음!!!!");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
     getIdCheck({ commit }, id) {
       http
         .get(`user/${id}`)
@@ -187,12 +206,13 @@ const userStore = {
           console.log(error);
         });
     },
-    async userDelete(context, uid) {
-      await http.delete(`user/delete/${uid}`)
-        .catch((error) => {
-        console.log(error);
-      });
-    },
+    // async userDelete(context, uid) {
+    //   await http.delete(`user/delete/${uid}`)
+    //     .catch((error) => {
+    //     console.log(error);
+    //   });
+    // },
+    
     async userModify(context, formData) {
       await http
         .put(`user/modify`, formData, {
