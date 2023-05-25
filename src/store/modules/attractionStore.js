@@ -14,10 +14,10 @@ const attractionStore = {
     partial_list: [],
     attraction_list_length: 0,
     attraction: null,
+    review_list: [],
     cur_page: 0,
   },
-  getters: {
-  },
+  getters: {},
   actions: {
     [Constant.GET_SIDOS]: (attractionStore) => {
       http.get("/attractions/sido").then((response) => {
@@ -27,13 +27,12 @@ const attractionStore = {
       });
     },
 
-    [Constant.GET_GUGUNS]: (attractionStore, newSidoCode)=>{
+    [Constant.GET_GUGUNS]: (attractionStore, newSidoCode) => {
       http.get("/attractions/sido/" + `${newSidoCode}`).then((response) => {
         attractionStore.commit(Constant.GET_GUGUNS, {
           gugun_list: response.data,
         });
-      })
-
+      });
     },
 
     [Constant.GET_ATTRACTIONS]: (attractionStore) => {
@@ -54,30 +53,23 @@ const attractionStore = {
         });
     },
 
-    [Constant.GET_ATTRACTION]: (attractionStore, content_id)=>{
-      http
-        .get(`/attractions/${content_id}`)
-        .then((response) => {
-          attractionStore.commit(Constant.GET_ATTRACTION, {
-            attraction: response.data,
-          });
+    [Constant.GET_ATTRACTION]: (attractionStore, content_id) => {
+      http.get(`/attractions/${content_id}`).then((response) => {
+        attractionStore.commit(Constant.GET_ATTRACTION, {
+          attraction: response.data,
         });
+      });
     },
 
-    [Constant.SEARCH]: (attractionStore, payload)=>{
+    [Constant.SEARCH]: (attractionStore, payload) => {
       http
-        .get(`/attractions/partial/search?offset=${payload.offset*6}&limit=6&sido_code=${payload.sido_code}&gugun_code=${payload.gugun_code}&content_type_id=${payload.content_type_id}&title=${payload.title}`)
-        .then((response) => {
-          attractionStore.commit(Constant.SEARCH, {
-            attraction_list: response.data,
-          });
-        });
-    },
-
-    [Constant.SEARCH]: (attractionStore, payload)=>{
-      
-      http
-        .get(`/attractions/partial/search?offset=${payload.offset*6}&limit=6&sido_code=${payload.sido_code}&gugun_code=${payload.gugun_code}&content_type_id=${payload.content_type_id}&title=${payload.title}`)
+        .get(
+          `/attractions/partial/search?offset=${
+            (payload.offset - 1) * 6
+          }&limit=6&sido_code=${payload.sido_code}&gugun_code=${
+            payload.gugun_code
+          }&content_type_id=${payload.content_type_id}&title=${payload.title}`
+        )
         .then((response) => {
           attractionStore.commit(Constant.SEARCH, {
             attraction_list: response.data,
@@ -85,14 +77,35 @@ const attractionStore = {
         });
     },
 
-    [Constant.CHANGE_SEARCH_PARAMS]: (attractionStore,{sido_code, gugun_code, content_type_id,title})=>{
+    [Constant.CHANGE_SEARCH_PARAMS]: (
+      attractionStore,
+      { sido_code, gugun_code, content_type_id, title }
+    ) => {
       attractionStore.commit(Constant.CHANGE_SEARCH_PARAMS, {
         sido_code: sido_code,
         gugun_code: gugun_code,
         content_type_id: content_type_id,
         title: title,
-      })
-    }
+      });
+    },
+
+    [Constant.GET_REVIEW]: (attractionStore, param) => {
+      http
+        .get("/attractions/review/" + `${param.content_id}`)
+        .then((response) => {
+          attractionStore.commit(Constant.GET_REVIEW, {
+            review_list: response.data,
+          });
+        });
+    },
+
+    [Constant.POST_REVIEW]: (attractionStore, param) => {
+      http
+        .post("/attractions/review/" + `${param.content_id}`, param.newReview)
+        .then(() => {
+          attractionStore.dispatch(Constant.GET_REVIEW, param);
+        });
+    },
   },
   mutations: {
     [Constant.GET_SIDOS]: (state, payload) => {
@@ -100,7 +113,7 @@ const attractionStore = {
       state.sido_list = payload.sido_list;
     },
 
-    [Constant.GET_GUGUNS]: (state,payload) => {
+    [Constant.GET_GUGUNS]: (state, payload) => {
       state.gugun_list = payload.gugun_list;
     },
 
@@ -116,16 +129,20 @@ const attractionStore = {
       state.attraction = payload.attraction;
     },
 
-    [Constant.SEARCH]: (state,payload) => {
+    [Constant.SEARCH]: (state, payload) => {
       state.attraction_list = payload.attraction_list;
     },
 
-    [Constant.CHANGE_SEARCH_PARAMS]: (state,payload) => {
+    [Constant.CHANGE_SEARCH_PARAMS]: (state, payload) => {
       state.sido_code = payload.sido_code;
       state.gugun_code = payload.gugun_code;
       state.content_type_id = payload.content_type_id;
       state.title = payload.title;
-    }
+    },
+
+    [Constant.GET_REVIEW]: (state, payload) => {
+      state.review_list = payload.review_list;
+    },
   },
 };
 
